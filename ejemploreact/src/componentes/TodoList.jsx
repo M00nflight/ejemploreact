@@ -2,23 +2,22 @@ import React, { useState,useRef,useEffect } from "react";
 import { TodoItem } from "./TodoItem";
 import {v4 as uuid} from 'uuid';
 
-const KEY="todolist-todos";
+const KEY="todoList-todos"; //el nombre que tendrá el arreglo en el localStorage
 
 export function TodoList(){
-    const {todos,setTodos}=useState(
+    const [todos, setTodos]=useState(
         /*[
             {id:1,task:"Tarea 1",complete:true},
             {id:1,task:"Tarea 1",complete:false}
         ]*/
-        JSON.parse(localStorage.getItem(KEY))?[...JSON.parse(localStorage.getItem(KEY)]:[]
+        JSON.parse(localStorage.getItem(KEY))?JSON.parse(localStorage.getItem(KEY)):[]
     );
-
+  
     const taskRef=useRef();
-
     useEffect(()=>{
         localStorage.setItem(KEY,JSON.stringify(todos));
-    },[todos]);//cuando cambie el todos los guarda en localStorage
-    
+        },[todos]);//cuando cambie el todos los guarda en localStorage
+
     const agregarTarea=()=>{
         //console.log("Agregando Tarea");
         const task=taskRef.current.value;
@@ -34,7 +33,6 @@ export function TodoList(){
         });
         taskRef.current.value="";
     }
-
     const ResumenTareas=()=>{
         const cantidad=cantidadTareas();
         if(cantidad>1){
@@ -51,11 +49,9 @@ export function TodoList(){
         </div>);
         }
     }
-
     const cantidadTareas=()=>{
         return todos.filter((todo)=>!todo.complete).length;
     }
-
     const cambiarEstadoTarea=(id)=>{
 
         const newTodos=[...todos];
@@ -63,9 +59,8 @@ export function TodoList(){
         todo.complete=!todo.complete;
         setTodos(newTodos);
     }
-
     const eliminarTareasCompletadas=()=>{
-        const newTodos=todos.filter((todo)=>!todo.complete);
+        const newTodos= todos.filter((todo)=>!todo.complete);
         setTodos(newTodos);
     }
     return (
